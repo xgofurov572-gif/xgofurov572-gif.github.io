@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="description" content="O'zDSMI Kutubxona-axborot faoliyati fakulteti rasmiy sahifasi"/>
+  <meta name="keywords" content="O'zDSMI, kutubxona, axborot faoliyati, fakultet, Usmonov, Xakimova"/>
+  <title>Kutubxona-Axborot Faoliyati | O'zDSMI</title>
+  <style>
+    /* ══════════════ O'ZGARUVCHILAR ══════════════ */
+    :root {
+      --brown:   #5c3d1e;
+      --amber:   #c8860a;
+      --gold:    #f0c040;
+      --cream:   #fdf6e3;
+      --dark:    #2c1a0a;
+      --green:   #2e6b3e;
+      --blue:    #1a4a7a;
+      --text:    #2c1a0a;
+      --muted:   #7a5c38;
+      --card:    #fffdf5;
+      --shadow:  0 4px 28px rgba(92,61,30,.13);
+      --radius:  14px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:var(--cream);
+      color:var(--text);
+      line-height:1.7;
+      overflow-x:hidden;
+    }
+
+    /* ══════════════ KITOB VARAQLARI ANIMATSIYA (orqa fon) ══════════════ */
+    .book-bg{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      pointer-events:none;z-index:0;overflow:hidden;
+    }
+    .page{
+      position:absolute;
+      width:60px;height:80px;
+      border-radius:2px 8px 8px 2px;
+      background:linear-gradient(135deg,rgba(200,134,10,.08),rgba(240,192,64,.12));
+      border:1px solid rgba(200,134,10,.15);
+      animation:floatPage linear infinite;
+      transform-origin:left center;
+    }
+    .page::before{
+      content:'';
+      position:absolute;
+      top:8px;left:8px;right:8px;
+      height:2px;background:rgba(92,61,30,.12);
+      border-radius:1px;
+      box-shadow:0 6px 0 rgba(92,61,30,.08),0 12px 0 rgba(92,61,30,.06),0 18px 0 rgba(92,61,30,.04);
+    }
+    @keyframes floatPage{
+      0%  {transform:translateY(110vh) rotate(-15deg) rotateY(0deg);opacity:0;}
+      10% {opacity:1;}
+      50% {transform:translateY(50vh) rotate(5deg) rotateY(30deg);}
+      90% {opacity:1;}
+      100%{transform:translateY(-20vh) rotate(-10deg) rotateY(60deg);opacity:0;}
+    }
+
+    /* ══════════════ NAV ══════════════ */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      background:rgba(44,26,10,.96);
+      display:flex;justify-content:space-between;align-items:center;
+      padding:0 6%;height:64px;
+      box-shadow:0 2px 20px rgba(0,0,0,.25);
+    }
+    .nav-logo{
+      display:flex;align-items:center;gap:.7rem;
+      color:#fff;text-decoration:none;font-size:1.1rem;font-weight:800;
+    }
+    .nav-logo .book-icon{font-size:1.5rem;}
+    .nav-logo span{color:var(--gold);}
+    nav ul{list-style:none;display:flex;gap:1.5rem;}
+    nav ul li a{
+      color:rgba(255,255,255,.82);text-decoration:none;
+      font-size:.88rem;font-weight:600;transition:color .2s;
+      padding:.3rem .1rem;border-bottom:2px solid transparent;
+    }
+    nav ul li a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+
+    /* ══════════════ HERO ══════════════ */
+    .hero{
+      min-height:100vh;
+      display:flex;align-items:center;justify-content:center;text-align:center;
+      padding:110px 7% 70px;
+      background:linear-gradient(160deg,#2c1a0a 0%,#5c3d1e 40%,#2e6b3e 100%);
+      position:relative;overflow:hidden;
+      z-index:1;
+    }
+    .hero-overlay{
+      position:absolute;inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f0c040' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content{position:relative;z-index:2;}
+
+    /* Kitob 3D animatsiya */
+    .hero-book{
+      width:120px;height:155px;
+      margin:0 auto 2rem;
+      position:relative;
+      perspective:600px;
+      cursor:pointer;
+    }
+    .book-3d{
+      width:100%;height:100%;
+      transform-style:preserve-3d;
+      animation:bookSpin 6s ease-in-out infinite;
+    }
+    @keyframes bookSpin{
+      0%,100%{transform:rotateY(-15deg) rotateX(5deg);}
+      50%{transform:rotateY(15deg) rotateX(-5deg);}
+    }
+    .book-cover{
+      position:absolute;inset:0;
+      background:linear-gradient(135deg,var(--amber) 0%,var(--brown) 100%);
+      border-radius:3px 10px 10px 3px;
+      box-shadow:-4px 4px 0 #1a0a00, -8px 8px 0 rgba(0,0,0,.3), 4px 0 16px rgba(0,0,0,.4);
+      display:flex;align-items:center;justify-content:center;
+      font-size:4rem;
+    }
+    .book-spine{
+      position:absolute;left:-12px;top:4px;bottom:4px;width:12px;
+      background:linear-gradient(180deg,#7a4e1e,#3d2508);
+      border-radius:3px 0 0 3px;
+    }
+    .book-pages{
+      position:absolute;right:-4px;top:4px;bottom:4px;width:8px;
+      background:linear-gradient(180deg,#f5f0e8,#e8dcc8,#f5f0e8);
+      border-radius:0 2px 2px 0;
+    }
+
+    .hero h1{
+      color:#fff;font-size:clamp(1.8rem,4vw,2.8rem);
+      font-weight:900;letter-spacing:-.5px;margin-bottom:.5rem;
+    }
+    .hero-sub{color:var(--gold);font-size:1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:.5rem;}
+    .hero-inst{color:rgba(255,255,255,.7);font-size:.95rem;margin-bottom:2rem;}
+
+    .stat-row{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;}
+    .stat-item{text-align:center;}
+    .stat-item .num{display:block;font-size:2rem;font-weight:900;color:var(--gold);}
+    .stat-item .lbl{font-size:.8rem;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.5px;}
+
+    .btn{
+      display:inline-block;padding:.72rem 1.9rem;border-radius:50px;
+      font-weight:700;font-size:.92rem;text-decoration:none;
+      transition:transform .2s,box-shadow .2s;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25);}
+    .btn-gold{background:var(--gold);color:var(--dark);}
+    .btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.4);margin-left:.7rem;}
+
+    /* ══════════════ SECTION BASE ══════════════ */
+    section{padding:90px 7%;position:relative;z-index:1;}
+    .section-tag{
+      font-size:.75rem;font-weight:800;letter-spacing:3px;
+      text-transform:uppercase;color:var(--amber);margin-bottom:.4rem;
+    }
+    .section-title{
+      font-size:clamp(1.6rem,3vw,2.1rem);font-weight:900;
+      color:var(--dark);margin-bottom:3rem;
+    }
+    .section-title::after{
+      content:'';display:block;width:54px;height:4px;
+      background:linear-gradient(90deg,var(--amber),var(--gold));
+      border-radius:2px;margin-top:.6rem;
+    }
+
+    /* ══════════════ HAQIDA ══════════════ */
+    #about{background:var(--card);}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+    .about-text p{color:var(--muted);margin-bottom:1rem;font-size:1rem;}
+    .highlight-box{
+      background:linear-gradient(135deg,var(--brown),var(--green));
+      border-radius:var(--radius);padding:1.8rem 2rem;color:#fff;margin-top:1.5rem;
+    }
+    .highlight-box h4{font-size:1rem;margin-bottom:.5rem;color:var(--gold);}
+    .highlight-box p{color:rgba(255,255,255,.82);font-size:.93rem;margin:0;}
+
+    .kafedra-list{display:flex;flex-direction:column;gap:1rem;}
+    .kafedra-card{
+      background:var(--cream);border-radius:var(--radius);
+      padding:1.2rem 1.5rem;border-left:4px solid var(--amber);
+      box-shadow:var(--shadow);
+      transition:transform .2s;
+    }
+    .kafedra-card:hover{transform:translateX(4px);}
+    .kafedra-card h4{font-size:.95rem;font-weight:800;color:var(--dark);margin-bottom:.2rem;}
+    .kafedra-card p{font-size:.85rem;color:var(--muted);}
+
+    /* ══════════════ DEKAN ══════════════ */
+    #dean{background:var(--cream);}
+    .dean-card{
+      background:linear-gradient(135deg,#2c1a0a 0%,#5c3d1e 60%,#2e6b3e 100%);
+      border-radius:20px;padding:3rem;color:#fff;
+      display:grid;grid-template-columns:220px 1fr;gap:3rem;align-items:center;
+      box-shadow:0 12px 48px rgba(92,61,30,.3);
+      max-width:900px;
+    }
+    .dean-avatar{
+      width:200px;height:200px;border-radius:16px;
+      background:linear-gradient(135deg,var(--amber),var(--gold));
+      display:flex;align-items:center;justify-content:center;
+      font-size:5rem;
+      box-shadow:0 8px 32px rgba(0,0,0,.3);
+      border:3px solid rgba(255,255,255,.2);
+    }
+    .dean-info h2{font-size:1.6rem;font-weight:900;margin-bottom:.3rem;}
+    .dean-info .title{color:var(--gold);font-size:.9rem;font-weight:700;letter-spacing:.5px;margin-bottom:1rem;}
+    .dean-info p{color:rgba(255,255,255,.78);font-size:.93rem;margin-bottom:1rem;}
+    .dean-meta{display:flex;flex-direction:column;gap:.6rem;margin-top:1rem;}
+    .dean-meta-item{
+      display:flex;align-items:center;gap:.7rem;
+      background:rgba(255,255,255,.1);border-radius:8px;
+      padding:.5rem .9rem;font-size:.88rem;
+    }
+
+    /* ══════════════ O'QITUVCHILAR ══════════════ */
+    #teachers{background:var(--card);}
+    .teachers-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:1.4rem;
+    }
+    .teacher-card{
+      background:var(--cream);border-radius:var(--radius);
+      padding:1.5rem 1.3rem;text-align:center;
+      box-shadow:var(--shadow);
+      border-top:4px solid var(--amber);
+      transition:transform .25s,box-shadow .25s;
+    }
+    .teacher-card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(92,61,30,.2);}
+    .t-avatar{
+      width:70px;height:70px;border-radius:50%;
+      background:linear-gradient(135deg,var(--brown),var(--green));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.8rem;margin:0 auto .9rem;
+      border:3px solid rgba(200,134,10,.3);
+    }
+    .teacher-card h4{font-size:.95rem;font-weight:800;color:var(--dark);margin-bottom:.3rem;}
+    .teacher-card .degree{
+      font-size:.78rem;color:var(--amber);font-weight:700;
+      background:rgba(200,134,10,.1);border-radius:50px;
+      padding:.2rem .7rem;display:inline-block;margin-bottom:.4rem;
+    }
+    .teacher-card .subject{font-size:.83rem;color:var(--muted);}
+
+    /* ══════════════ O'QUV DASTURI ══════════════ */
+    #curriculum{background:var(--cream);}
+    .year-tabs{display:flex;gap:.6rem;margin-bottom:2rem;flex-wrap:wrap;}
+    .tab-btn{
+      padding:.5rem 1.3rem;border-radius:50px;border:2px solid var(--amber);
+      background:transparent;color:var(--amber);font-weight:700;font-size:.88rem;
+      cursor:pointer;transition:all .2s;
+    }
+    .tab-btn.active,.tab-btn:hover{background:var(--amber);color:#fff;}
+    .year-content{display:none;}
+    .year-content.active{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;}
+    .subject-card{
+      background:var(--card);border-radius:10px;
+      padding:1rem 1.2rem;border-left:3px solid var(--amber);
+      box-shadow:var(--shadow);
+      display:flex;align-items:flex-start;gap:.7rem;
+    }
+    .subject-icon{font-size:1.3rem;margin-top:.1rem;}
+    .subject-card h5{font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:.15rem;}
+    .subject-card p{font-size:.78rem;color:var(--muted);}
+
+    /* ══════════════ KUTUBXONA KATALOGI ══════════════ */
+    #library{background:var(--card);}
+    .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.3rem;}
+    .book-card{
+      background:var(--cream);border-radius:var(--radius);
+      padding:1.4rem 1.2rem;
+      box-shadow:var(--shadow);
+      border-bottom:3px solid var(--amber);
+      transition:transform .2s;
+    }
+    .book-card:hover{transform:translateY(-3px);}
+    .book-cover-mini{
+      width:50px;height:65px;border-radius:3px 8px 8px 3px;
+      background:linear-gradient(135deg,var(--amber),var(--brown));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem;margin-bottom:1rem;
+      box-shadow:-2px 2px 0 rgba(0,0,0,.2);
+    }
+    .book-card h5{font-size:.9rem;font-weight:800;color:var(--dark);margin-bottom:.3rem;}
+    .book-card .author{font-size:.8rem;color:var(--amber);font-weight:600;margin-bottom:.3rem;}
+    .book-card .year-tag{
+      font-size:.75rem;color:var(--muted);
+      background:rgba(92,61,30,.08);border-radius:50px;
+      padding:.15rem .6rem;display:inline-block;
+    }
+
+    /* ══════════════ YANGILIKLAR ══════════════ */
+    #news{background:var(--cream);}
+    .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+    .news-card{
+      background:var(--card);border-radius:var(--radius);
+      overflow:hidden;box-shadow:var(--shadow);
+      transition:transform .25s;
+    }
+    .news-card:hover{transform:translateY(-4px);}
+    .news-header{
+      padding:1.5rem 1.5rem 0;
+      display:flex;align-items:center;gap:.6rem;
+    }
+    .news-date{
+      font-size:.78rem;color:#fff;font-weight:700;
+      background:var(--brown);border-radius:50px;
+      padding:.25rem .8rem;
+    }
+    .news-tag{
+      font-size:.75rem;color:var(--amber);font-weight:700;
+      background:rgba(200,134,10,.12);border-radius:50px;
+      padding:.25rem .8rem;
+    }
+    .news-body{padding:1rem 1.5rem 1.5rem;}
+    .news-body h4{font-size:.98rem;font-weight:800;color:var(--dark);margin-bottom:.5rem;}
+    .news-body p{font-size:.88rem;color:var(--muted);}
+
+    /* ══════════════ TALABALAR PORTALI ══════════════ */
+    #students{
+      background:linear-gradient(145deg,#2c1a0a 0%,#5c3d1e 50%,#1a4a7a 100%);
+      color:#fff;
+    }
+    #students .section-tag{color:var(--gold);}
+    #students .section-title{color:#fff;}
+    #students .section-title::after{background:var(--gold);}
+    .portal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.3rem;}
+    .portal-card{
+      background:rgba(255,255,255,.08);border-radius:var(--radius);
+      padding:1.8rem 1.5rem;text-align:center;
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(4px);
+      transition:background .25s,transform .2s;
+      text-decoration:none;color:#fff;
+      display:block;
+    }
+    .portal-card:hover{background:rgba(255,255,255,.16);transform:translateY(-4px);}
+    .portal-icon{font-size:2.5rem;margin-bottom:.9rem;}
+    .portal-card h4{font-size:1rem;font-weight:800;margin-bottom:.3rem;}
+    .portal-card p{font-size:.83rem;color:rgba(255,255,255,.65);}
+
+    /* ══════════════ ALOQA ══════════════ */
+    #contact{background:var(--card);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+    .contact-cards{display:flex;flex-direction:column;gap:1rem;}
+    .c-card{
+      display:flex;align-items:center;gap:1rem;
+      background:var(--cream);border-radius:var(--radius);
+      padding:1.1rem 1.5rem;
+      border-left:4px solid var(--amber);
+      box-shadow:var(--shadow);
+      text-decoration:none;color:var(--text);
+      transition:transform .2s;
+    }
+    .c-card:hover{transform:translateX(4px);}
+    .c-icon{
+      width:46px;height:46px;border-radius:11px;
+      background:linear-gradient(135deg,var(--amber),var(--brown));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.2rem;flex-shrink:0;
+    }
+    .c-card small{display:block;color:var(--muted);font-size:.75rem;}
+    .c-card span{font-weight:700;font-size:.97rem;color:var(--dark);}
+    .map-box{
+      background:linear-gradient(135deg,var(--brown),var(--green));
+      border-radius:var(--radius);padding:2.5rem;color:#fff;
+      text-align:center;
+    }
+    .map-box .map-icon{font-size:3rem;margin-bottom:1rem;}
+    .map-box h3{font-size:1.1rem;margin-bottom:.5rem;}
+    .map-box p{color:rgba(255,255,255,.75);font-size:.9rem;margin-bottom:1.2rem;}
+
+    /* ══════════════ FOOTER ══════════════ */
+    footer{
+      background:#1a0a00;color:rgba(255,255,255,.5);
+      text-align:center;padding:2rem;font-size:.83rem;
+    }
+    footer b{color:var(--gold);}
+
+    /* ══════════════ RESPONSIVE ══════════════ */
+    @media(max-width:768px){
+      nav ul{display:none;}
+      .about-grid,.dean-card,.contact-grid{grid-template-columns:1fr;}
+      .dean-card{padding:2rem;}
+      .dean-avatar{width:120px;height:120px;font-size:3rem;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ KITOB VARAQLARI ORQA FON ═══ -->
+<div class="book-bg" id="bookBg"></div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav>
+  <a class="nav-logo" href="#home">
+    <span class="book-icon">📚</span>
+    <span>KAF <span>O'zDSMI</span></span>
+  </a>
+  <ul>
+    <li><a href="#about">Fakultet</a></li>
+    <li><a href="#dean">Dekan</a></li>
+    <li><a href="#teachers">O'qituvchilar</a></li>
+    <li><a href="#curriculum">O'quv dasturi</a></li>
+    <li><a href="#library">Kutubxona</a></li>
+    <li><a href="#news">Yangiliklar</a></li>
+    <li><a href="#students">Talabalar</a></li>
+    <li><a href="#contact">Aloqa</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero" id="home">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-book">
+      <div class="book-3d">
+        <div class="book-spine"></div>
+        <div class="book-cover">📖</div>
+        <div class="book-pages"></div>
+      </div>
+    </div>
+
+    <h1>Kutubxona-Axborot Faoliyati</h1>
+    <p class="hero-sub">Fakultet · O'zDSMI</p>
+    <p class="hero-inst">O'zbekiston Davlat San'at va Madaniyat instituti<br>
+      Toshkent · 1959-yildan buyon bilim tarqatmoqda</p>
+
+    <div class="stat-row">
+      <div class="stat-item"><span class="num">4</span><span class="lbl">Kafedra</span></div>
+      <div class="stat-item"><span class="num">65+</span><span class="lbl">Yillik tarix</span></div>
+      <div class="stat-item"><span class="num">500+</span><span class="lbl">Talaba</span></div>
+      <div class="stat-item"><span class="num">20+</span><span class="lbl">O'qituvchi</span></div>
+    </div>
+
+    <a href="#about" class="btn btn-gold">Batafsil →</a>
+    <a href="#contact" class="btn btn-outline">Aloqa</a>
+  </div>
+</section>
+
+<!-- ═══════ HAQIDA ═══════ -->
+<section id="about">
+  <p class="section-tag">Tanishuv</p>
+  <h2 class="section-title">Fakultet haqida</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        <strong>Kutubxona-axborot faoliyati</strong> fakulteti O'zbekiston Davlat San'at va
+        Madaniyat institutining yetakchi bo'linmalaridan biri bo'lib, 1959-yildan beri
+        axborot-kutubxona sohasida malakali mutaxassislar tayyorlab kelmoqda.
+      </p>
+      <p>
+        Fakultet <strong>60320400 – "Kutubxona-axborot faoliyati"</strong> bakalavriat
+        ta'lim yo'nalishi bo'yicha mutaxassislar tayyorlaydi. Bitiruvchilar kutubxonalar,
+        arxivlar, axborot markazlari va raqamli resurslar sohasida faoliyat yuritadilar.
+      </p>
+      <div class="highlight-box">
+        <h4>📋 Ta'lim yo'nalishi kodi</h4>
+        <p>60320400 — Kutubxona-axborot faoliyati · Bakalavriat · 4 yil</p>
+      </div>
+    </div>
+    <div>
+      <p style="font-weight:800;font-size:.95rem;color:var(--dark);margin-bottom:1rem;">🏛️ Kafedra tarkibi</p>
+      <div class="kafedra-list">
+        <div class="kafedra-card">
+          <h4>📚 Kutubxona-axborot faoliyati kafedrasi</h4>
+          <p>Mudiri: Xakimova Muborakxon Yakubjonovna — PhD, dotsent</p>
+        </div>
+        <div class="kafedra-card">
+          <h4>💻 Axborot texnologiyalari kafedrasi</h4>
+          <p>Raqamli texnologiyalar va axborot tizimlari yo'nalishi</p>
+        </div>
+        <div class="kafedra-card">
+          <h4>📖 O'zbek va jahon filologiyasi kafedrasi</h4>
+          <p>Tilshunoslik va adabiyotshunoslik yo'nalishi</p>
+        </div>
+        <div class="kafedra-card">
+          <h4>🌐 Ijtimoiy-gumanitar fanlar kafedrasi</h4>
+          <p>Ijtimoiy va gumanitar fanlar majmuasi</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ DEKAN ═══════ -->
+<section id="dean">
+  <p class="section-tag">Rahbariyat</p>
+  <h2 class="section-title">Fakultet dekani</h2>
+  <div class="dean-card">
+    <div class="dean-avatar">👨‍🏫</div>
+    <div class="dean-info">
+      <h2>Usmonov Boxodir Suvonqul o'g'li</h2>
+      <p class="title">Kutubxona-axborot faoliyati fakulteti dekani</p>
+      <p>
+        Iqtisod fanlari bo'yicha falsafa doktori (PhD), dotsent.
+        1 ta o'quv qo'llanma, 1 ta monografiya, uslubiy qo'llanmalar
+        va 50 dan ortiq maqola va tezislar muallifi.
+      </p>
+      <div class="dean-meta">
+        <div class="dean-meta-item">⌚ Qabul kunlari: Har kuni (yakshanbadan tashqari) 14:00–17:00</div>
+        <div class="dean-meta-item">📞 Telefon: +998 71 230 28 45</div>
+        <div class="dean-meta-item">🌐 dsmi.uz/kutubxona-axborot-faoliyati</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ O'QITUVCHILAR ═══════ -->
+<section id="teachers">
+  <p class="section-tag">Jamoamiz</p>
+  <h2 class="section-title">Professor-o'qituvchilar</h2>
+  <div class="teachers-grid">
+    <div class="teacher-card">
+      <div class="t-avatar">👩‍🏫</div>
+      <h4>Xakimova Muborakxon Yakubjonovna</h4>
+      <span class="degree">PhD · Dotsent</span>
+      <p class="subject">Kafedra mudiri · Kutubxonashunoslik</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Nosirov O'.</h4>
+      <span class="degree">Fan nomzodi · Professor v.b.</span>
+      <p class="subject">Falsafa fanlari</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Maxmudov M.X.</h4>
+      <span class="degree">Ped. fan. nomzodi · Dotsent</span>
+      <p class="subject">Pedagogika fanlari</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Bayto'rayev T.D.</h4>
+      <span class="degree">Ped. fan. nomzodi · Dotsent</span>
+      <p class="subject">Pedagogika fanlari</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Davlatov S.X.</h4>
+      <span class="degree">Filol. fan. nomzodi · Dotsent</span>
+      <p class="subject">Filologiya fanlari</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Usmonov B.S.</h4>
+      <span class="degree">PhD · Dotsent</span>
+      <p class="subject">Iqtisod fanlari · Dekan</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👩‍🏫</div>
+      <h4>Muminxodjayeva L.N.</h4>
+      <span class="degree">O'qituvchi</span>
+      <p class="subject">Axborot tizimlari</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Isxakov M.</h4>
+      <span class="degree">Katta o'qituvchi</span>
+      <p class="subject">Kutubxona texnologiyalari</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Mannonov Y.</h4>
+      <span class="degree">Katta o'qituvchi</span>
+      <p class="subject">Bibliografiya</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👨‍🏫</div>
+      <h4>Say I.K.</h4>
+      <span class="degree">Katta o'qituvchi</span>
+      <p class="subject">Axborot resurslari</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👩‍🏫</div>
+      <h4>Ro'ziyeva N.P.</h4>
+      <span class="degree">O'qituvchi</span>
+      <p class="subject">Kutubxona kataloglashtirish</p>
+    </div>
+    <div class="teacher-card">
+      <div class="t-avatar">👩‍🏫</div>
+      <h4>Abduganiyeva Z.M.</h4>
+      <span class="degree">O'qituvchi</span>
+      <p class="subject">Axborot xizmati</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ O'QUV DASTURI ═══════ -->
+<section id="curriculum">
+  <p class="section-tag">Akademik dastur</p>
+  <h2 class="section-title">O'quv dasturi</h2>
+  <div class="year-tabs">
+    <button class="tab-btn active" onclick="showYear(1)">1-kurs</button>
+    <button class="tab-btn" onclick="showYear(2)">2-kurs</button>
+    <button class="tab-btn" onclick="showYear(3)">3-kurs</button>
+    <button class="tab-btn" onclick="showYear(4)">4-kurs</button>
+  </div>
+
+  <div class="year-content active" id="year1">
+    <div class="subject-card"><span class="subject-icon">📐</span><div><h5>Matematika va informatika asoslari</h5><p>Raqamli savodxonlik</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🌐</span><div><h5>Xorijiy til</h5><p>Ingliz / Rus tili</p></div></div>
+    <div class="subject-card"><span class="subject-icon">📚</span><div><h5>Kutubxonashunoslikka kirish</h5><p>Asosiy nazariyalar</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🏛️</span><div><h5>O'zbekiston tarixi</h5><p>Milliy tarix</p></div></div>
+    <div class="subject-card"><span class="subject-icon">💬</span><div><h5>O'zbek tili va adabiyoti</h5><p>Ona tili</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🤔</span><div><h5>Falsafa</h5><p>Mantiq va etika</p></div></div>
+  </div>
+
+  <div class="year-content" id="year2">
+    <div class="subject-card"><span class="subject-icon">🗂️</span><div><h5>Kutubxona fondlari</h5><p>Fond shakllantirish nazariyasi</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🔖</span><div><h5>Bibliografiyashunoslik</h5><p>Ilmiy bibliografiya</p></div></div>
+    <div class="subject-card"><span class="subject-icon">💻</span><div><h5>Axborot texnologiyalari</h5><p>Raqamli kutubxona tizimlari</p></div></div>
+    <div class="subject-card"><span class="subject-icon">📊</span><div><h5>Axborot resurslari</h5><p>Baza va kataloglar</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🤖</span><div><h5>Sun'iy intellekt asoslari</h5><p>AI kutubxonalarda</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🌍</span><div><h5>Xalqaro kutubxona aloqalari</h5><p>IFLA standartlari</p></div></div>
+  </div>
+
+  <div class="year-content" id="year3">
+    <div class="subject-card"><span class="subject-icon">🏗️</span><div><h5>Axborot tizimlari loyihalash</h5><p>Tizim arxitekturasi</p></div></div>
+    <div class="subject-card"><span class="subject-icon">📖</span><div><h5>Elektron kutubxona</h5><p>Raqamli resurslar boshqaruvi</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🔍</span><div><h5>Ilmiy tadqiqot metodologiyasi</h5><p>Tadqiqot usullari</p></div></div>
+    <div class="subject-card"><span class="subject-icon">📱</span><div><h5>Raqamli marketing</h5><p>Kutubxona xizmatlari PR</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🛡️</span><div><h5>Axborot xavfsizligi</h5><p>Ma'lumotlar himoyasi</p></div></div>
+    <div class="subject-card"><span class="subject-icon">👥</span><div><h5>Kitobxonlar psixologiyasi</h5><p>Xizmat ko'rsatish madaniyati</p></div></div>
+  </div>
+
+  <div class="year-content" id="year4">
+    <div class="subject-card"><span class="subject-icon">🎓</span><div><h5>Bitiruv malakaviy ishi</h5><p>Ilmiy tadqiqot</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🏢</span><div><h5>Amaliyot</h5><p>Kutubxona / Arxiv</p></div></div>
+    <div class="subject-card"><span class="subject-icon">📋</span><div><h5>Boshqaruv va menejment</h5><p>Kutubxona boshqaruvi</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🌐</span><div><h5>Web-texnologiyalar</h5><p>Sayt va portal yaratish</p></div></div>
+    <div class="subject-card"><span class="subject-icon">📈</span><div><h5>Ilmiy nashriyot</h5><p>Maqola va monografiya</p></div></div>
+    <div class="subject-card"><span class="subject-icon">🔬</span><div><h5>Arxivshunoslik</h5><p>Arxiv fondlari boshqaruvi</p></div></div>
+  </div>
+</section>
+
+<!-- ═══════ KUTUBXONA KATALOGI ═══════ -->
+<section id="library">
+  <p class="section-tag">Resurslar</p>
+  <h2 class="section-title">Kutubxona katalogi</h2>
+  <div class="lib-grid">
+    <div class="book-card">
+      <div class="book-cover-mini">📗</div>
+      <h5>Kutubxonashunoslik asoslari</h5>
+      <p class="author">Yu.N.Stolyarov</p>
+      <span class="year-tag">Darslik</span>
+    </div>
+    <div class="book-card">
+      <div class="book-cover-mini">📘</div>
+      <h5>Axborot-kutubxona faoliyati</h5>
+      <p class="author">K.I.Abramov</p>
+      <span class="year-tag">O'quv qo'llanma</span>
+    </div>
+    <div class="book-card">
+      <div class="book-cover-mini">📙</div>
+      <h5>Bibliografiyashunoslik</h5>
+      <p class="author">O.P.Koršunov</p>
+      <span class="year-tag">Nazariya</span>
+    </div>
+    <div class="book-card">
+      <div class="book-cover-mini">📕</div>
+      <h5>Elektron kutubxona</h5>
+      <p class="author">Ya.L.Shreyberg</p>
+      <span class="year-tag">Texnologiya</span>
+    </div>
+    <div class="book-card">
+      <div class="book-cover-mini">📗</div>
+      <h5>O'zbek kutubxonachiligi tarixi</h5>
+      <p class="author">Mahkamova N.</p>
+      <span class="year-tag">Tarix</span>
+    </div>
+    <div class="book-card">
+      <div class="book-cover-mini">📘</div>
+      <h5>Axborot tizimlari va texnologiyalar</h5>
+      <p class="author">Rashidov A.</p>
+      <span class="year-tag">IT · Zamonaviy</span>
+    </div>
+    <div class="book-card">
+      <div class="book-cover-mini">📙</div>
+      <h5>Fond shakllantirish nazariyasi</h5>
+      <p class="author">Grigoriev Yu.V.</p>
+      <span class="year-tag">Fond boshqaruv</span>
+    </div>
+    <div class="book-card">
+      <div class="book-cover-mini">📕</div>
+      <h5>Raqamli arxivshunoslik</h5>
+      <p class="author">Tixonov V.I.</p>
+      <span class="year-tag">Arxiv · Raqamli</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ YANGILIKLAR ═══════ -->
+<section id="news">
+  <p class="section-tag">So'nggi xabarlar</p>
+  <h2 class="section-title">Yangiliklar va e'lonlar</h2>
+  <div class="news-grid">
+    <div class="news-card">
+      <div class="news-header">
+        <span class="news-date">Sentabr 2026</span>
+        <span class="news-tag">🏆 Yutuq</span>
+      </div>
+      <div class="news-body">
+        <h4>Talabamiz AI loyiha musobaqasida 2-o'rin egalladi</h4>
+        <p>Institut bosqichida o'tkazilgan "Eng yaxshi sun'iy intellekt loyihasi" musobaqasida fakultet talabasi G'ofurov Xusniddin 2-o'rinni qo'lga kiritdi.</p>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-header">
+        <span class="news-date">2024 · 2-sentabr</span>
+        <span class="news-tag">📋 Tashkiliy</span>
+      </div>
+      <div class="news-body">
+        <h4>Yangi kafedra tashkil etildi</h4>
+        <p>"Kutubxona-axborot faoliyati" kafedrasi 2024-yil 2-sentabrda tashkil etildi — ikki kafedraning birlashmasidan vujudga keldi.</p>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-header">
+        <span class="news-date">2026 yil</span>
+        <span class="news-tag">📚 Ta'lim</span>
+      </div>
+      <div class="news-body">
+        <h4>2026-2027 o'quv yili qabuli boshlandi</h4>
+        <p>Kutubxona-axborot faoliyati yo'nalishi bo'yicha yangi o'quv yili uchun qabul rasmiylashtirilmoqda. Batafsil dsmi.uz saytida.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TALABALAR PORTALI ═══════ -->
+<section id="students">
+  <p class="section-tag">Talabalar uchun</p>
+  <h2 class="section-title">Talabalar portali</h2>
+  <div class="portal-grid">
+    <a href="https://dsmi.uz" target="_blank" class="portal-card">
+      <div class="portal-icon">📅</div>
+      <h4>Dars jadvali</h4>
+      <p>Joriy semestr darslari jadvali</p>
+    </a>
+    <a href="https://dsmi.uz" target="_blank" class="portal-card">
+      <div class="portal-icon">📝</div>
+      <h4>Imtihon jadvali</h4>
+      <p>Semestr oxiri imtihonlar</p>
+    </a>
+    <a href="https://dsmi.uz" target="_blank" class="portal-card">
+      <div class="portal-icon">📚</div>
+      <h4>Elektron resurslar</h4>
+      <p>Online kitoblar va maqolalar</p>
+    </a>
+    <a href="https://dsmi.uz" target="_blank" class="portal-card">
+      <div class="portal-icon">🎓</div>
+      <h4>Bitiruv ishlari</h4>
+      <p>Mavzular va yo'riqnomalar</p>
+    </a>
+    <a href="https://dsmi.uz" target="_blank" class="portal-card">
+      <div class="portal-icon">📊</div>
+      <h4>Reyting tizimi</h4>
+      <p>Akademik ko'rsatkichlar</p>
+    </a>
+    <a href="https://dsmi.uz" target="_blank" class="portal-card">
+      <div class="portal-icon">📢</div>
+      <h4>E'lonlar</h4>
+      <p>Fakultet yangiliklari</p>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════ ALOQA ═══════ -->
+<section id="contact">
+  <p class="section-tag">Bog'lanish</p>
+  <h2 class="section-title">Aloqa ma'lumotlari</h2>
+  <div class="contact-grid">
+    <div class="contact-cards">
+      <a class="c-card" href="tel:+998712302845">
+        <div class="c-icon">📞</div>
+        <div><small>Dekanat telefoni</small><span>+998 71 230 28 45</span></div>
+      </a>
+      <a class="c-card" href="https://dsmi.uz" target="_blank">
+        <div class="c-icon">🌐</div>
+        <div><small>Rasmiy sayt</small><span>dsmi.uz</span></div>
+      </a>
+      <a class="c-card" href="https://www.facebook.com/uzdsmi" target="_blank">
+        <div class="c-icon">👥</div>
+        <div><small>Facebook</small><span>facebook.com/uzdsmi</span></div>
+      </a>
+      <a class="c-card" href="#">
+        <div class="c-icon">⌚</div>
+        <div><small>Qabul vaqti (Dekan)</small><span>Du–Sha · 14:00–17:00</span></div>
+      </a>
+    </div>
+    <div class="map-box">
+      <div class="map-icon">📍</div>
+      <h3>Bizning manzil</h3>
+      <p>Toshkent shahri, Mirzo Ulug'bek tumani,<br>Yalang'och dahasi, 127 "A" uy</p>
+      <a href="https://maps.google.com/?q=O'zbekiston+Davlat+San'at+va+Madaniyat+instituti" target="_blank" class="btn btn-gold">🗺️ Xaritada ko'rish</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <p>© 2026 <b>O'zDSMI · Kutubxona-axborot faoliyati fakulteti</b> · Barcha huquqlar himoyalangan</p>
+  <p style="margin-top:.4rem;">🌐 <a href="https://dsmi.uz" style="color:var(--gold);text-decoration:none;">dsmi.uz</a></p>
+</footer>
+
+<script>
+  /* ── Kitob varaqlari generatsiya ── */
+  const bg = document.getElementById('bookBg');
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='page';
+    p.style.cssText=`
+      left:${Math.random()*100}%;
+      width:${40+Math.random()*50}px;
+      height:${55+Math.random()*60}px;
+      animation-duration:${8+Math.random()*14}s;
+      animation-delay:${-Math.random()*20}s;
+      opacity:${0.3+Math.random()*0.4};
+      transform:rotate(${-20+Math.random()*40}deg);
+    `;
+    bg.appendChild(p);
+  }
+
+  /* ── Yil tablari ── */
+  function showYear(n){
+    document.querySelectorAll('.year-content').forEach(el=>el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.remove('active'));
+    document.getElementById('year'+n).classList.add('active');
+    document.querySelectorAll('.tab-btn')[n-1].classList.add('active');
+  }
+
+  /* ── Scroll animatsiya ── */
+  const io=new IntersectionObserver(
+    entries=>entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.style.opacity='1';
+        e.target.style.transform='translateY(0) scale(1)';
+      }
+    }),
+    {threshold:0.1}
+  );
+  document.querySelectorAll(
+    '.teacher-card,.book-card,.news-card,.portal-card,.kafedra-card,.subject-card,.c-card'
+  ).forEach(el=>{
+    el.style.opacity='0';
+    el.style.transform='translateY(20px) scale(.97)';
+    el.style.transition='opacity .5s ease,transform .5s ease';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
